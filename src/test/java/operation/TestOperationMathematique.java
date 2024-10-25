@@ -51,4 +51,15 @@ public class TestOperationMathematique {
     assertArrayEquals(expected, res);
   }
 
+  @Test
+  public void testFactorialNegative(){
+    int num = -5;
+
+    try {
+      operationMathematique.factorial(num);
+    } catch (IllegalArgumentException e) {
+      assertEquals(e.getMessage(), num + " must be greater than or equal to 0");
+    }
+  }
+
 }
