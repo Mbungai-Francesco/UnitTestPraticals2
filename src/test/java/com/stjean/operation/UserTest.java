@@ -10,12 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
-  private com.stjean.operation.user user;
+  private User user;
 
   @BeforeEach
   void setUp(){
-    user = new user(0, null, 0, null, null, null, 0);
-    com.stjean.operation.user.users.clear();
+    user = new User(0, null, 0, null, null, null, 0);
+    User.users.clear();
   }
 
   @AfterEach
@@ -25,27 +25,27 @@ public class UserTest {
   @Test
   void testAdd() {
     // Test adding a valid user
-    com.stjean.operation.user validUser = new user(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
+    User validUser = new User(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
     try {
       user.add(validUser);
     } catch (EmailInvalidException e) {
       fail(e);
     }
-    assertEquals(1, com.stjean.operation.user.users.size());
-    assertEquals(validUser, com.stjean.operation.user.users.get(0));
+    assertEquals(1, User.users.size());
+    assertEquals(validUser, User.users.get(0));
     
     // Test adding a user with an invalid email
-    com.stjean.operation.user invalidUser = new user(2, "Jane Doe", 25, "jane.doe.invalid", "0987654321", "Los Angeles", 500.0);
+    User invalidUser = new User(2, "Jane Doe", 25, "jane.doe.invalid", "0987654321", "Los Angeles", 500.0);
     assertThrows(EmailInvalidException.class, () -> {
         user.add(invalidUser);
     });
-    assertEquals(1, com.stjean.operation.user.users.size()); // Ensure the invalid user was not added
+    assertEquals(1, User.users.size()); // Ensure the invalid user was not added
   }
 
   @Test
   void testDelete() {
     // Add a valid user
-    com.stjean.operation.user validUser = new user(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
+    User validUser = new User(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
     try {
         user.add(validUser);
     } catch (EmailInvalidException e) {
@@ -58,7 +58,7 @@ public class UserTest {
     } catch (DeletionInvalidException e) {
         fail(e);
     }
-    assertEquals(0, com.stjean.operation.user.users.size());
+    assertEquals(0, User.users.size());
 
     // Attempt to delete a non-existent user
     assertThrows(DeletionInvalidException.class, () -> {
@@ -69,7 +69,7 @@ public class UserTest {
   @Test
   void testDisplay() {
     // Add a valid user
-    com.stjean.operation.user validUser = new user(1,"John Doe",30,"john.doe@example.com","1234567890","New York",1000.0);
+    User validUser = new User(1,"John Doe",30,"john.doe@example.com","1234567890","New York",1000.0);
     try {
       user.add(validUser);
     } catch (EmailInvalidException e) {
@@ -88,4 +88,60 @@ public class UserTest {
     user.display(2);
     assertEquals("", res);
   }
+
+  @Test
+    void testGetRichestUser() {
+        // Add multiple users with different balances
+        User user1 = new User(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
+        User user2 = new User(2, "Jane Doe", 25, "jane.doe@example.com", "0987654321", "Los Angeles", 2000.0);
+        User user3 = new User(3, "Jim Beam", 40, "jim.beam@example.com", "1122334455", "Chicago", 1500.0);
+        try {
+            user.add(user1);
+            user.add(user2);
+            user.add(user3);
+        } catch (EmailInvalidException e) {
+            fail(e);
+        }
+
+        // Verify that the richest user is returned
+        User richestUser = user.getRichestUser();
+        assertEquals(user2, richestUser);
+    }
+
+    @Test
+    void testAnalyseSoldeGeneral() {
+        // Add multiple users with different balances
+        User user1 = new User(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
+        User user2 = new User(2, "Jane Doe", 25, "jane.doe@example.com", "0987654321", "Los Angeles", 2000.0);
+        User user3 = new User(3, "Jim Beam", 40, "jim.beam@example.com", "1122334455", "Chicago", 1500.0);
+        try {
+            user.add(user1);
+            user.add(user2);
+            user.add(user3);
+        } catch (EmailInvalidException e) {
+            fail(e);
+        }
+
+        // Verify that the total balance is correct
+        try{
+          double totalBalance = user.analyseSoldeGeneral();
+          assertEquals(4500.0, totalBalance);
+        }
+        catch(NegativeGeneralBalanceException e){
+          fail(e);
+        }
+
+        // Add a user with a negative balance to test exception
+        User user4 = new User(4, "Negative Balance", 35, "negative.balance@example.com", "6677889900", "Houston", -5000.0);
+        try {
+            user.add(user4);
+        } catch (EmailInvalidException e) {
+            fail(e);
+        }
+
+        // Verify that NegativeGeneralBalanceException is thrown
+        assertThrows(NegativeGeneralBalanceException.class, () -> {
+            user.analyseSoldeGeneral();
+        });
+    }
 }

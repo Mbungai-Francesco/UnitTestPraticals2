@@ -3,7 +3,7 @@ package com.stjean.operation;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-public class user {
+public class User {
 
   private int id;
   private String name;
@@ -13,9 +13,9 @@ public class user {
   private String city;
   private double balancePersonnel;
 
-  public static ArrayList<user> users = new ArrayList<user>();
+  public static ArrayList<User> users = new ArrayList<User>();
 
-  public user(int id, String name, int age, String email, String phone, String city, double balancePersonnel) {
+  public User(int id, String name, int age, String email, String phone, String city, double balancePersonnel) {
     this.id = id;
     this.name = name;
     this.age = age;
@@ -77,7 +77,7 @@ public class user {
     return true;
   }
 
-  public void add(user user) throws EmailInvalidException {
+  public void add(User user) throws EmailInvalidException {
     boolean valid = validateEmail(user.getEmail());
     if(valid){
       users.add(user);
@@ -96,7 +96,7 @@ public class user {
 
   public String display(int id) {
     String ans = "";
-    for (com.stjean.operation.user user : users) {
+    for (User user : users) {
       if (user.getId() == id) {
         ans = "User{" +
             "id=" + id +
