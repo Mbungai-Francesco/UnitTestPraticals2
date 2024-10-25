@@ -1,6 +1,7 @@
 package com.stjean.operation;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class User {
 
@@ -67,13 +68,30 @@ public class User {
     this.balancePersonnel = balancePersonnel;
   }
 
-  public static void add(User user) {
-    users.add(user);
+  private static void validateEmail(String email) throws EmailInvalidException {
+    String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+    Pattern pattern = Pattern.compile(emailRegex);
+    if (!pattern.matcher(email).matches()) {
+      throw new EmailInvalidException("Email is invalid");
+    }
   }
 
-  public static void delete(int id) {
-      users.removeIf(user -> user.getId() == id);
+  public static void add(User user) {
+    try{
+      validateEmail(user.getEmail());
+      users.add(user);
+    }
+    catch (EmailInvalidException e) {
+      System.out.println(e.getMessage());
+    }
   }
+
+  public static void delete(int id) throws DeletionInvalidException {
+    boolean removed = users.removeIf(user -> user.getId() == id);
+    if (!removed) {
+        throw new DeletionInvalidException("User with id " + id + " does not exist.");
+    }
+}
 
   public static void display(int id) {
       for (User user : users) {
