@@ -7,6 +7,9 @@ public class OperationMathematique {
   }
 
   public int factorial(int n) {
+    if( n < 0) {
+      throw new IllegalArgumentException(n +" must be greater than or equal to 0");
+    }
     if (n == 0) {
       return 1;
     } else {
