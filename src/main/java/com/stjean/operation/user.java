@@ -1,6 +1,8 @@
 package com.stjean.operation;
 
-public class user {
+import java.util.ArrayList;
+
+public class User {
 
   private int id;
   private String name;
@@ -9,7 +11,19 @@ public class user {
   private String phone;
   private String city;
   private double balancePersonnel;
-  
+
+  public static ArrayList<User> users;
+
+  public User(int id, String name, int age, String email, String phone, String city, double balancePersonnel) {
+    this.id = id;
+    this.name = name;
+    this.age = age;
+    this.email = email;
+    this.phone = phone;
+    this.city = city;
+    this.balancePersonnel = balancePersonnel;
+  }
+
   public int getId() {
     return id;
   }
@@ -51,6 +65,32 @@ public class user {
   }
   public void setBalancePersonnel(double balancePersonnel) {
     this.balancePersonnel = balancePersonnel;
+  }
+
+  public static void add(User user) {
+    users.add(user);
+  }
+
+  public static void delete(int id) {
+      users.removeIf(user -> user.getId() == id);
+  }
+
+  public static void display(int id) {
+      for (User user : users) {
+        if (user.getId() == id) {
+            System.out.println(
+              "User{" +
+              "id=" + id +
+              ", name='" + user.getName() + '\'' +
+              ", age=" + user.getAge() +
+              ", email='" + user.getEmail() + '\'' +
+              ", phone='" + user.getPhone() + '\'' +
+              ", city='" + user.getCity() + '\'' +
+              ", balancePersonnel=" + user.getBalancePersonnel() +
+              '}'
+            );
+        }
+      }
   }
 
 }
