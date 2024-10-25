@@ -13,7 +13,7 @@ public class User {
   private String city;
   private double balancePersonnel;
 
-  public static ArrayList<User> users;
+  public static ArrayList<User> users = new ArrayList<User>();
 
   public User(int id, String name, int age, String email, String phone, String city, double balancePersonnel) {
     this.id = id;
@@ -68,47 +68,71 @@ public class User {
     this.balancePersonnel = balancePersonnel;
   }
 
-  private static void validateEmail(String email) throws EmailInvalidException {
+  private static boolean validateEmail(String email) {
     String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
     Pattern pattern = Pattern.compile(emailRegex);
     if (!pattern.matcher(email).matches()) {
-      throw new EmailInvalidException("Email is invalid");
+      return false;
     }
+    return true;
   }
 
-  public static void add(User user) {
-    try{
-      validateEmail(user.getEmail());
+  public void add(User user) throws EmailInvalidException {
+    boolean valid = validateEmail(user.getEmail());
+    if(valid){
       users.add(user);
     }
-    catch (EmailInvalidException e) {
-      System.out.println(e.getMessage());
+    else{
+      throw new EmailInvalidException("Invalid email: " + user.getEmail());
     }
   }
 
-  public static void delete(int id) throws DeletionInvalidException {
+  public void delete(int id) throws DeletionInvalidException {
     boolean removed = users.removeIf(user -> user.getId() == id);
     if (!removed) {
         throw new DeletionInvalidException("User with id " + id + " does not exist.");
     }
 }
 
-  public static void display(int id) {
-      for (User user : users) {
-        if (user.getId() == id) {
-            System.out.println(
-              "User{" +
-              "id=" + id +
-              ", name='" + user.getName() + '\'' +
-              ", age=" + user.getAge() +
-              ", email='" + user.getEmail() + '\'' +
-              ", phone='" + user.getPhone() + '\'' +
-              ", city='" + user.getCity() + '\'' +
-              ", balancePersonnel=" + user.getBalancePersonnel() +
-              '}'
-            );
-        }
+  public String display(int id) {
+    String ans = "";
+    for (User user : users) {
+      if (user.getId() == id) {
+        ans = "User{" +
+            "id=" + id +
+            ", name='" + user.getName() + 
+            ", age=" + user.getAge() +
+            ", email='" + user.getEmail() + 
+            ", phone='" + user.getPhone() +
+            ", city='" + user.getCity() +
+            ", balancePersonnel=" + user.getBalancePersonnel() +
+            "}";
       }
+    }
+    return ans;
   }
 
+  public double analyseSoldeGeneral() throws NegativeGeneralBalanceException{
+    double totalBalance = 0.0;
+    for (User user : users) {
+        totalBalance += user.getBalancePersonnel();
+    }
+    if (totalBalance < 0) {
+      throw new NegativeGeneralBalanceException("General balance is negative: " + totalBalance);
+  }
+    return totalBalance;
+  }
+
+  public User getRichestUser() {
+    if (users.isEmpty()) {
+        return null;
+    }
+    User richestUser = users.get(0);
+    for (User user : users) {
+        if (user.getBalancePersonnel() > richestUser.getBalancePersonnel()) {
+            richestUser = user;
+        }
+    }
+    return richestUser;
+  }
 }
