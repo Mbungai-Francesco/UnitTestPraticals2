@@ -1,5 +1,7 @@
 package operation;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
@@ -36,7 +38,17 @@ public class TestOperationMathematique {
 
     int res = operationMathematique.factorial(num);
     
-    assertTrue(res == 120, num + "! = " + res);
+    assertEquals(res, 120);
+  }
+
+  @Test
+  public void sort(){
+    int[] tab = {5, 3, 1, 4, 2};
+    int[] expected = {5, 4, 3, 2, 1};
+
+    int[] res = operationMathematique.sort(tab);
+    
+    assertArrayEquals(expected, res);
   }
 
 }
