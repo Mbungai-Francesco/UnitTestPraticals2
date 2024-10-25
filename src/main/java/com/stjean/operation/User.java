@@ -111,28 +111,4 @@ public class User {
     }
     return ans;
   }
-
-  public double analyseSoldeGeneral() throws NegativeGeneralBalanceException{
-    double totalBalance = 0.0;
-    for (User user : users) {
-        totalBalance += user.getBalancePersonnel();
-    }
-    if (totalBalance < 0) {
-      throw new NegativeGeneralBalanceException("General balance is negative: " + totalBalance);
-  }
-    return totalBalance;
-  }
-
-  public User getRichestUser() {
-    if (users.isEmpty()) {
-        return null;
-    }
-    User richestUser = users.get(0);
-    for (User user : users) {
-        if (user.getBalancePersonnel() > richestUser.getBalancePersonnel()) {
-            richestUser = user;
-        }
-    }
-    return richestUser;
-  }
 }
