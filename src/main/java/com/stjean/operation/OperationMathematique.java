@@ -30,4 +30,17 @@ public class OperationMathematique {
     }
     return array;
   }
+
+  public double maxNumba(double[] values) {
+    if (values == null || values.length == 0) {
+      throw new IllegalArgumentException("Array must not be null or empty");
+    }
+    double max = values[0];
+    for (double value : values) {
+      if (value > max) {
+        max = value;
+      }
+    }
+    return max;
+  }
 }
