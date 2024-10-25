@@ -2,6 +2,7 @@ package operation;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
@@ -60,6 +61,20 @@ public class TestOperationMathematique {
     } catch (IllegalArgumentException e) {
       assertEquals(e.getMessage(), num + " must be greater than or equal to 0");
     }
+  }
+
+  @Test
+  public void testMaxNumba(){
+    // Test with not empty array
+    double[] values1 = {1.5, 3.2, -2.4, 7.8, 0.0};
+    assertEquals(7.8, operationMathematique.maxNumba(values1), 0.001);
+
+
+    // Test with an empty array
+    double[] values5 = {};
+    assertThrows(IllegalArgumentException.class, () -> {
+      operationMathematique.maxNumba(values5);
+    });
   }
 
 }
