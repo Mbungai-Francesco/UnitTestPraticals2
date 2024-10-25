@@ -5,20 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
-  private User user;
+  private com.stjean.operation.user user;
 
   @BeforeEach
   void setUp(){
-    user = new User(0, null, 0, null, null, null, 0);
-    User.users.clear();
+    user = new user(0, null, 0, null, null, null, 0);
+    com.stjean.operation.user.users.clear();
   }
 
   @AfterEach
@@ -28,27 +25,27 @@ public class UserTest {
   @Test
   void testAdd() {
     // Test adding a valid user
-    User validUser = new User(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
+    com.stjean.operation.user validUser = new user(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
     try {
       user.add(validUser);
     } catch (EmailInvalidException e) {
       fail(e);
     }
-    assertEquals(1, User.users.size());
-    assertEquals(validUser, User.users.get(0));
+    assertEquals(1, com.stjean.operation.user.users.size());
+    assertEquals(validUser, com.stjean.operation.user.users.get(0));
     
     // Test adding a user with an invalid email
-    User invalidUser = new User(2, "Jane Doe", 25, "jane.doe.invalid", "0987654321", "Los Angeles", 500.0);
+    com.stjean.operation.user invalidUser = new user(2, "Jane Doe", 25, "jane.doe.invalid", "0987654321", "Los Angeles", 500.0);
     assertThrows(EmailInvalidException.class, () -> {
         user.add(invalidUser);
     });
-    assertEquals(1, User.users.size()); // Ensure the invalid user was not added
+    assertEquals(1, com.stjean.operation.user.users.size()); // Ensure the invalid user was not added
   }
 
   @Test
   void testDelete() {
     // Add a valid user
-    User validUser = new User(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
+    com.stjean.operation.user validUser = new user(1, "John Doe", 30, "john.doe@example.com", "1234567890", "New York", 1000.0);
     try {
         user.add(validUser);
     } catch (EmailInvalidException e) {
@@ -61,7 +58,7 @@ public class UserTest {
     } catch (DeletionInvalidException e) {
         fail(e);
     }
-    assertEquals(0, User.users.size());
+    assertEquals(0, com.stjean.operation.user.users.size());
 
     // Attempt to delete a non-existent user
     assertThrows(DeletionInvalidException.class, () -> {
@@ -72,7 +69,7 @@ public class UserTest {
   @Test
   void testDisplay() {
     // Add a valid user
-    User validUser = new User(1,"John Doe",30,"john.doe@example.com","1234567890","New York",1000.0);
+    com.stjean.operation.user validUser = new user(1,"John Doe",30,"john.doe@example.com","1234567890","New York",1000.0);
     try {
       user.add(validUser);
     } catch (EmailInvalidException e) {
